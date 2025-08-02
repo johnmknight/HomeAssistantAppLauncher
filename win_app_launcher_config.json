@@ -1,0 +1,12 @@
+{
+    "apps": {
+        "launch-vkey": {
+            "type": "python",
+            "app_path": "vkey.py",
+            "play_music": false,
+            "browser": null
+        }
+    },
+    "port": 8080,
+    "auto_start_enabled": false
+}
