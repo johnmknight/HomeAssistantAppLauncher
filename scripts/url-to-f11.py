@@ -1,3 +1,13 @@
+"""
+Usage Examples:
+
+1. Using Python and command line:
+   python url_f11.py https://spacedashboard.com/
+
+2. Using curl to trigger via win_app_launcher:
+   curl "http://192.168.4.47:8081/launch-url-to-f11?key=https://spacedashboard.com/"
+"""
+
 import sys
 import subprocess
 import time
@@ -43,17 +53,24 @@ if (-not $found) {{ Write-Output "OPENED_NEW" }} else {{ Write-Output "FOCUSED" 
 
     if "OPENED_NEW" in result.stdout:
         print("Opened new window/tab. Waiting for browser to become active, then sending F11...")
-        time.sleep(3)  # Adjust as needed for browser startup time
+        time.sleep(3)  # Wait for browser to launch (adjust as needed)
     else:
         print("Focused existing browser tab. Sending F11 for full screen...")
-        time.sleep(1)  # Short delay in case focus is not immediate
+        time.sleep(1)  # Short delay for focus
 
     send_f11()
     print("Sent F11 to active window.")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python url_f11.py <url>")
-        sys.exit(1)
-    url = sys.argv[1]
+    # Allow "key" param as well for web/launcher compatibility
+    url = None
+    if len(sys.argv) >= 2:
+        url = sys.argv[1]
+    else:
+        # Check for key=... in environment or as fallback for launcher/curl compatibility
+        import os
+        url = os.environ.get("key", None)
+        if not url:
+            print("Usage: python url_f11.py <url>")
+            sys.exit(1)
     open_or_fullscreen_url(url)
