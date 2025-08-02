@@ -15,7 +15,6 @@ def send_f11():
 def open_or_fullscreen_url(url):
     url_lc = url.lower()
 
-    # PowerShell script checks for open tabs and focuses or opens new window
     ps_script = f"""
 $url = "{url_lc}"
 $found = $false
@@ -37,20 +36,20 @@ if (-not $found) {{
 }}
 if (-not $found) {{ Write-Output "OPENED_NEW" }} else {{ Write-Output "FOCUSED" }}
 """
-    # Run the PowerShell script and capture output
     result = subprocess.run(
         ["powershell", "-ExecutionPolicy", "Bypass", "-Command", ps_script],
         capture_output=True, text=True
     )
 
-    # If a new window was opened, wait and send F11
     if "OPENED_NEW" in result.stdout:
-        print("Opened new window, sending F11 to fullscreen...")
-        # Wait for the browser to launch and become active
-        time.sleep(3)
-        send_f11()
+        print("Opened new window/tab. Waiting for browser to become active, then sending F11...")
+        time.sleep(3)  # Adjust as needed for browser startup time
     else:
-        print("Focused existing browser tab (no F11 sent).")
+        print("Focused existing browser tab. Sending F11 for full screen...")
+        time.sleep(1)  # Short delay in case focus is not immediate
+
+    send_f11()
+    print("Sent F11 to active window.")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
