@@ -19,7 +19,7 @@ def main():
 
     # Wait a bit to ensure the video/browser is ready for the next key
     time.sleep(4)
- 
+
     # 2. Call vkey endpoint to send 'f' to the player (YouTube full screen)
     vkey_endpoint = f'{LAUNCHER_BASE}/launch-vkey?key=f'
     print(f"Calling: {vkey_endpoint}")
